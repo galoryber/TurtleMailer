@@ -48,7 +48,7 @@ class GenericMail {
 
         foreach (string email in recipientLines) {
             while (true) {
-                if (TurtleMailer.IsWorkingTime())
+                if (TurtleMailer.IsWorkingTime(config))
                 {
                     Log.Information($"Starting email process for {email}");
 
@@ -58,7 +58,11 @@ class GenericMail {
                     message.To.Add(new MailboxAddress(email, email));
                     message.Subject = emailSubject;
 
-                    message.Body = new TextPart("html") { Text = emailHTMLContent };
+                    // Always send HTML and Plaintext versions
+                    var bodyBuilder = new BodyBuilder();
+                    bodyBuilder.HtmlBody = emailHTMLContent;
+                    bodyBuilder.TextBody = emailPlainTextContent;
+                    message.Body = bodyBuilder.ToMessageBody(); // new TextPart("html") { Text = emailHTMLContent };
 
                     // attachment section - also shows changing body to include multipart plaintext and html
                     // todo - mimekit.net/docs/html/Creating-Messages.htm

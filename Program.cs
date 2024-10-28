@@ -1,4 +1,6 @@
-﻿using Microsoft.Extensions.Configuration;
+﻿using System.ComponentModel.DataAnnotations;
+using Microsoft.Extensions.Configuration;
+using MimeKit;
 using Serilog;
 
 class TurtleMailer {
@@ -35,17 +37,31 @@ class TurtleMailer {
         Log.Information("Application finished");
         Log.CloseAndFlush();
     }
-    public static bool IsWorkingTime()
+    public static bool IsWorkingTime(IConfiguration config)
         {
             DateTime now = DateTime.Now;
             //Log.Information("Time now is " + now);
             // Not needed if logger timestamps file and output //Log.Information(now);
+            IConfiguration globalAppSetting = config.GetSection("GlobalSettings");
 
+            // Get days of operation from config file
+            var dayStartConfig = globalAppSetting["WorkingDayStart"];
+            var dayEndConfig = globalAppSetting["WorkingDayEnd"];
+            System.DayOfWeek startDay = (DayOfWeek)Enum.Parse(typeof(DayOfWeek), dayStartConfig);
+            System.DayOfWeek endDay = (DayOfWeek)Enum.Parse(typeof(DayOfWeek), dayEndConfig);
+            
             // Check if the current day is between Monday (DayOfWeek.Monday) and Friday (DayOfWeek.Friday)
-            bool isWeekday = now.DayOfWeek >= DayOfWeek.Monday && now.DayOfWeek <= DayOfWeek.Friday;
+            bool isWeekday = now.DayOfWeek >= startDay && now.DayOfWeek <= endDay;
 
+            // Get time of operation from config file
+            var timeStartConfig = globalAppSetting["WorkingTimeStart"];
+            var timeEndConfig = globalAppSetting["WorkingTimeEnd"];
+            int startHour = int.Parse(timeStartConfig.Split(':')[0]);
+            int startMinute = int.Parse(timeStartConfig.Split(':')[1]);            
+            int endHour = int.Parse(timeEndConfig.Split(':')[0]);
+            int endMinute = int.Parse(timeEndConfig.Split(':')[1]);
             // Check if the current time is between 6:30 AM and 4 PM
-            bool isWorkingHours = now.TimeOfDay >= new TimeSpan(6, 30, 0) && now.TimeOfDay <= new TimeSpan(16, 30, 0);
+            bool isWorkingHours = now.TimeOfDay >= new TimeSpan(startHour, startMinute, 0) && now.TimeOfDay <= new TimeSpan(endHour, endMinute, 0);
 
             return isWeekday && isWorkingHours;
         }
