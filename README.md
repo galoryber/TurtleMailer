@@ -4,7 +4,7 @@
 ![Turtle Mailer](images/image.png)
 
 ## Description
-Turt(le) Mail is a TU RT tool to build phishing emails and slowly schedule the send of that email through Azure Communication Services and other Email send providers. 
+Turtle Mailer is a Red Team tool to build phishing emails and slowly schedule the send of that email through Azure Communication Services and other Email send providers. 
 
 Features include:
 - Sends emails based on a list of email addresses provided
@@ -19,10 +19,10 @@ While running, output will indicate timing and actions taken. This output will b
 
 ## Installation
 
-The tool is written in, and therfore requires, [.NET 8.0](https://dotnet.microsoft.com/en-us/download). 
+The tool is written in, and therefore requires, [.NET 8.0](https://dotnet.microsoft.com/en-us/download). 
 
 ## Usage
-First, edit the appsettings.json file to fit your needs. This includes defining what provider you'll use to send emails, and drafting up your email message in the HTML template (or plaintext).
+First, edit the appsettings.json file to fit your needs. This includes defining what provider you'll use to send emails, and drafting up your email message in the HTML template (AND plaintext).
 
 ![Config File](images/appsettings.png)
 
@@ -47,7 +47,11 @@ Finally, start running the program ->
 
 **Note** 
 
-The template files and appsettings files are copied to the output directory when compiled. If you change them, you should save them and recompile to make sure you're not editing or running the wrong template files. 
+The template files and appsettings files **are copied** to the output directory when compiled. If you change them, you should save the files and **recompile** to make sure you're not editing or running the wrong template files. 
+
+As in... appsettings.json will be in the root directory, AND ALSO the output directory once compiled. The compiled binary reads the adjacent configs that were copied to the output directory.
+
+This was convenient while testing the app, but may change in the future to avoid duplicate config files existing. 
 
 ## Testing Emails
 
@@ -57,7 +61,7 @@ I would recommened drafting your email and sending to several DIFFERENT email ad
 - target behind ProofPoint address
 - etc...
 
-For example, a phishing email with a maliciously redirected link might get blocked, but sending a maliciously redirected link that utilizes Google AMP page redirection will likely land in a gmail inbox  just fine, but get blocked to other services like M365. 
+For example, a phishing email with a maliciously redirected link might get blocked, but sending a maliciously redirected link that utilizes Google AMP page redirection will likely land in a gmail inbox just fine, but get blocked to other services like M365. 
 
 ## Providers
 
@@ -65,14 +69,12 @@ The Turtle Mailer has been tested using:
 - Azure Communication Services ```AzureCommunicationServices```
 - Generic SMTP (using Office 365) ```GenericSMTP```
 
-The generic smtp client option should allow us to use any service. Bought a domain for $2 on NameCheap, then bought their SMTP Email subscription? That should work, just plug in their SMTP server into our config and compile. 
+The generic smtp client option should allow us to use any service. Bought a domain for $2 on NameCheap, then bought their SMTP Email subscription? That should work, just plug in their SMTP server into the config and compile. 
 
 As we come accross additional mailing services, we can utilize them in this tool or craft an additional Provider specific config. 
 
 ## Roadmap
 
-- Seperate repo to deploy these Azure Communication Services on whatever domain we define
-- Long term - adapt to other utilities, SES? Other providers? 
-- Reload config on each loop - could hot swap certain elements then. Mid email list, change from address, change HTML, change attachment, etc. 
-- emails should be sent with HTML and plaintext as multipart - most common delivery method. MailKit shows the correct way ( and precendence) to do this, and azurecommservices also had example code in their GUI version of the email sender
+- Adapt to other utilities, SES? Other providers? 
+- Reload config on each loop - could hot swap certain elements then. Mid email list, change the from address, change HTML, change attachment, etc. 
 - Attachments - not currently handling content-type automatically, needs work, review, implmentation
