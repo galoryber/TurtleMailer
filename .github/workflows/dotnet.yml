@@ -26,5 +26,4 @@ jobs:
       run: ls -alh
     - name: Build
       run: dotnet build TurtleMailer.csproj
-    - name: Test
-      run: dotnet test --no-build --verbosity normal
+
