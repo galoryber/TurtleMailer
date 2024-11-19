@@ -18,6 +18,7 @@ class GenericMail {
         var startTLS = bool.Parse(GenericMailAppSetting["StartTLS"]);
         var DisplayName = GenericMailAppSetting["FromAddressDisplayName"];
         var SMTPUser = GenericMailAppSetting["SMTPUser"]; //config["AppSettings:FromAddress"]; //"DoNotReply@site-right.com";
+        var SMTPFromAddress = GenericMailAppSetting["SMTPFromAddress"]; //The SMTPUser might be the same as this, but in some cases (AWS SES) the credentials are different from the sending address
         var SMTPPass = GenericMailAppSetting["SMTPPass"];
 
         var emailSubject = globalAppSetting["Subject"]; // "Remedy Available";
@@ -42,7 +43,7 @@ class GenericMail {
         var emailHTMLContent = File.ReadAllText(pathToHTMLEmail);
         var emailPlainTextContent = File.ReadAllText(pathToPlaintextEmail);
 
-        Log.Information($"SMTP Server is {smtpServer} for user {SMTPUser}");
+        Log.Information($"SMTP Server is {smtpServer} for user {SMTPFromAddress}");
         // Start building SMTP Client objects
         var lastEmail = recipientLines.Last();
 
@@ -54,7 +55,7 @@ class GenericMail {
 
                     // Create the email
                     var message = new MimeMessage();
-                    message.From.Add(new MailboxAddress(DisplayName, SMTPUser));
+                    message.From.Add(new MailboxAddress(DisplayName, SMTPFromAddress));
                     message.To.Add(new MailboxAddress(email, email));
                     message.Subject = emailSubject;
 
