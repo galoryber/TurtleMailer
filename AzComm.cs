@@ -58,7 +58,7 @@ class AzComm {
 
         foreach (string email in recipientLines) {
             while (true) {
-                    if (TurtleMailer.IsWorkingTime())
+                    if (TurtleMailer.IsWorkingTime(config))
                         {
                             // Turn each individual recipient list item into an email address object
                             emailAddrs.Add(new EmailAddress(email));

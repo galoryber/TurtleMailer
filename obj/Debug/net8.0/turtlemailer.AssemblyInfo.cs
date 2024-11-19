@@ -13,7 +13,7 @@ using System.Reflection;
 [assembly: System.Reflection.AssemblyCompanyAttribute("turtlemailer")]
 [assembly: System.Reflection.AssemblyConfigurationAttribute("Debug")]
 [assembly: System.Reflection.AssemblyFileVersionAttribute("1.0.0.0")]
-[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+c250aa6285eabcfaa998cb268dabe1823c8e222a")]
+[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+6e292e5ce0b20d83a844345de36139a9ab2bb368")]
 [assembly: System.Reflection.AssemblyProductAttribute("turtlemailer")]
 [assembly: System.Reflection.AssemblyTitleAttribute("turtlemailer")]
 [assembly: System.Reflection.AssemblyVersionAttribute("1.0.0.0")]
